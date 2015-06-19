@@ -12,7 +12,7 @@ class Transação(object):
 		arquivo = open(caminho,"r");
 		retorno = []
 		for line in arquivo:
-			identificador = line.split(":")[0]
+			identificador = int(line.split(":")[0][1:])
 			operações = re.findall("(\S+?)\((\S+?)\)",line.split(":")[1])
 			operações = list(map(Operação._make,operações))
 			retorno.append(Transação(identificador,operações))
