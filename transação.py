@@ -8,6 +8,27 @@ class Transação(object):
 		super(Transação, self).__init__()
 		self.identificador = identificador
 		self.operações = operações
+
+	def primeiro_teste(Ti,Tj):
+		# Transaction Tj completa sua fase de escrita antes que Ti começou sua
+		# fase de leitura
+		return False
+
+	def segundo_teste(Ti, Tj):
+		# Ti começa a sua fase de escrita depois que Tj completa sua fase de
+		# escrita e o conjunto de leitura de Ti não tem intersecção com o
+		# conjunto de escrita de Tj
+		return False
+
+	def terceiro_teste(Ti, Tj):
+		# A união do conjunto de leitura e escrita de Ti não tem intersecção
+		# com o conjunto de escrita de Tj e Tj completa sua fase de leitura antes de Ti.
+		return False
+
+	def validar(Ti,comitadas):
+		teste = lambda Tj: Ti.primeiro_teste(Tj) or Ti.segundo_teste(Tj) or Ti.terceiro_teste(Tj)
+		return all(map(teste,comitadas))
+
 	def ler_do_arquivo(caminho):
 		arquivo = open(caminho,"r");
 		retorno = []
