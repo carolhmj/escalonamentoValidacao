@@ -3,9 +3,10 @@ from collections import namedtuple
 import re
 
 class Transação(object):
-	"""Estados possíveis em que uma transação pode estar"""
-	(INICIADA, LENDO, COMMITED) = (1, 2, 3)
 	"""docstring for Transação"""
+	# Estados possíveis em que uma transação pode estar
+	(INICIADA, LENDO, COMMITED) = (1, 2, 3)
+
 	def __init__(self, identificador, operações):
 		super(Transação, self).__init__()
 		self.identificador = identificador
@@ -17,31 +18,25 @@ class Transação(object):
 	def primeiro_teste(Ti,Tj):
 		# Transaction Tj completa sua fase de escrita antes que Ti começou sua
 		# fase de leitura
-		if (Tj.timestamp_commit < Ti.timestamp_leitura):
-			return True
-		else:
-			return False
+		return Tj.timestamp_commit < Ti.timestamp_leitura
 
 	def segundo_teste(Ti, Tj):
 		# Ti começa a sua fase de escrita depois que Tj completa sua fase de
 		# escrita e o conjunto de leitura de Ti não tem intersecção com o
 		# conjunto de escrita de Tj
-		if (Ti.conjunto_leitura.isdisjoint(Tj.conjunto_leitura)):
-			return True
-		else:
-			return False
+		return Ti.conjunto_leitura.isdisjoint(Tj.conjunto_leitura)
 
 	def terceiro_teste(Ti, Tj):
 		# A união do conjunto de leitura e escrita de Ti não tem intersecção
 		# com o conjunto de escrita de Tj e Tj completa sua fase de leitura antes de Ti.
-		if (Ti.conjunto_leitura.isdisjoint(Tj.conjunto_escrita) and Ti.conjunto_escrita.isdisjoint(Tj.conjunto_escrita)):
-			return True
-		else:
-			return False
-		
+		x = Ti.conjunto_leitura.isdisjoint(Tj.conjunto_escrita) and \
+		    Ti.conjunto_escrita.isdisjoint(Tj.conjunto_escrita)
 
 	def validar(Ti,timestamp,comitadas):
-		teste = lambda Tj: Ti.primeiro_teste(Tj) or Ti.segundo_teste(Tj) or Ti.terceiro_teste(Tj)
+		teste = lambda Tj: Ti.primeiro_teste(Tj) or \
+		                   Ti.segundo_teste(Tj)  or \
+		                   Ti.terceiro_teste(Tj)
+
 		validada = all(map(teste,comitadas))
 		if (validada):
 			Ti.timestamp_commit = timestamp
@@ -71,17 +66,13 @@ class Transação(object):
 			self.conjunto_escrita.add(operação.objeto)
 
 		self.numero_operações = self.numero_operações + 1
-		if (self.numero_operações == len(self.operações) ):
-			return True
-		else:
-			return False
+		return self.numero_operações == len(self.operações)
 
 	def reiniciar_transação(self):
 		"""Reincia a transação"""
 		self.estado = self.INICIADA
 		self.conjunto_leitura.clear()
 		self.conjunto_escrita.clear()
-
 
 
 Operação = namedtuple("Operação",['op','objeto'])

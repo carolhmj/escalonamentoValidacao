@@ -17,7 +17,7 @@ class Gerenciador(object):
 		arquivo.close()
 		return história
 
-	def escrever_historia(história, arquivo):	
+	def escrever_historia(história, arquivo):
 		for operação in história:
 			arquivo.write(operação.op + operação.transação + "(" + operação.objeto + ")")
 		
@@ -69,4 +69,4 @@ class Gerenciador(object):
 			if (i<len(lista_commited)):
 				arquivo.write(", ")
 
-OperaçãoGerenciador = namedtuple("OperaçãoGerenciador",['op','transação','objeto'])		
+OperaçãoGerenciador = namedtuple("OperaçãoGerenciador",['op','transação','objeto'])
