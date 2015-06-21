@@ -87,7 +87,5 @@ class Transação(object):
 	def reiniciar_transação(self):
 		"""Reincia a transação"""
 		self.estado = self.INICIADA
-		self.conjunto_leitura.clear()
-		self.conjunto_escrita.clear()
 
 Operação = namedtuple("Operação",['op','objeto'])
