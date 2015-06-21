@@ -28,8 +28,11 @@ class Gerenciador(object):
 		# isso pode mudar quando retirarmos transações dela
 		história_saída = história_inicial
 
-		#arquivo = open(arquivo_saida,'w')
-		arquivo = sys.stdout;
+		if arquivo_saida == "stdout":
+			arquivo = sys.stdout;
+		else:
+			arquivo = open(arquivo_saida,'w')
+
 		arquivo.write("Schedule de Entrada: ")
 		Gerenciador.escrever_historia(história_inicial, arquivo)
 
