@@ -13,18 +13,19 @@ class Gerenciador(object):
 
 	def ler_história():
 		história = input()
-		história = re.findall("(\S+?)(\d+)\((\S+?)\)",hist)
-		história = map(lambda p: (p[0],int(p[1]),p[2]), sequence)
+		história = re.findall("(\S+?)(\d+)\((\S+?)\)",história)
+		história = map(lambda p: (p[0],int(p[1]),p[2]), história)
 		história = list(map(OperaçãoGerenciador._make,história))
 		return história
 
 	def escrever_historia(história, arquivo):
 		for operação in história:
-			arquivo.write(operação.op + operação.transação + "(" + operação.objeto + ")")
+			arquivo.write(operação.op + str(operação.transação) + "(" + operação.objeto + ")")
 
 	def executar(self, arquivo_saida):
 		história_inicial = Gerenciador.ler_história()
-		#Inicialmente a história de saída é igual a história inicial, isso pode mudar quando retirarmos transações dela
+		# Inicialmente a história de saída é igual a história inicial,
+		# isso pode mudar quando retirarmos transações dela
 		história_saída = história_inicial
 
 		#arquivo = open(arquivo_saida,'w')
@@ -41,7 +42,7 @@ class Gerenciador(object):
 			if (transação.estado == Transação.INICIADA):
 				transação.iniciar_leitura(timestamp)
 
-			if (transação.inserir_operação(Operação(operação.op, operação.objeto))):
+			if (transação.próxima_operação()):
 				if (transação.validar(timestamp,lista_commited)):
 					lista_commited.append(transação)
 				else:

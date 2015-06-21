@@ -1,5 +1,0 @@
-Schedule de Entrada: r1(x)r2(y)r3(z)w1(x)w2(y)w3(z)
-Schedule de Saída: r1(x)r2(y)r3(z)w1(x)w2(y)w3(z)
-Deadlock: Não
-Transações Abortadas: 
-Transações Efetivadas: T1, T2, T3

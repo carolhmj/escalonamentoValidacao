@@ -72,13 +72,10 @@ class Transação(object):
 		self.timestamp_leitura = timestamp
 		self.numero_operações = 0
 
-	def inserir_operação(self,operação):
-		"""Insere a operação no conjunto apropriado. Retorna True se todas as operações daquela transação forem realizadas, assinalando a hora de dar commit"""
-		if (operação.op == "w"):
-			self.conjunto_leitura.add(operação.objeto)
-		else:
-			self.conjunto_escrita.add(operação.objeto)
-
+	def próxima_operação(self):
+		"""Leva a transação par a próxima operação.
+		Retorna True se todas as operações daquela transação forem realizadas,
+		assinalando a hora de dar commit"""
 		self.numero_operações = self.numero_operações + 1
 		return self.numero_operações == len(self.operações)
 
