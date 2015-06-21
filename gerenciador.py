@@ -10,17 +10,16 @@ class Gerenciador(object):
 		super(Gerenciador, self).__init__()
 		self.lista_transacoes = Transação.ler_do_arquivo(arquivo_transacoes)
 
-	def ler_história(arquivo_história):
-		arquivo = open(arquivo_história,'r')
-		história = re.findall("(\S)(\d+?)\((\S+?)\)",arquivo.read())
+	def ler_história():
+		história = input()
+		história = re.findall("(\S+?)(\d+)\((\S+?)\)",hist)
 		história = list(map(OperaçãoGerenciador._make,história))
-		arquivo.close()
 		return história
 
 	def escrever_historia(história, arquivo):
 		for operação in história:
 			arquivo.write(operação.op + operação.transação + "(" + operação.objeto + ")")
-		
+
 
 	def executar(self, arquivo_história, arquivo_saida):
 		história_inicial = Gerenciador.ler_história(arquivo_história)
@@ -50,7 +49,7 @@ class Gerenciador(object):
 					lista_cancelada.append(transação)
 
 			timestamp = timestamp + 1
-		
+
 		arquivo.write("\nSchedule de Saída: ")
 		Gerenciador.escrever_historia(história_saída, arquivo)
 		arquivo.write("\nDeadlock: Não")

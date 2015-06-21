@@ -74,5 +74,4 @@ class Transação(object):
 		self.conjunto_leitura.clear()
 		self.conjunto_escrita.clear()
 
-
 Operação = namedtuple("Operação",['op','objeto'])
