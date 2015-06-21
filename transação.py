@@ -15,8 +15,21 @@ class Transação(object):
 		self.conjunto_leitura = set()
 		self.conjunto_escrita = set()
 
+		for op in operações:
+			if   op.op == "w":
+				self.conjunto_escrita.add(op.objeto)
+			elif op.op == "r":
+				self.conjunto_leitura.add(op.objeto)
+
+	def __repr__(self):
+		out = "Transação("+repr(self.identificador)+",[\""
+		for op in self.operações:
+			out+=op.op+"("+op.objeto+")"
+		out += "\"])"
+		return out
+
 	def primeiro_teste(Ti,Tj):
-		# Transaction Tj completa sua fase de escrita antes que Ti começou sua
+		# Transação Tj completa sua fase de escrita antes que Ti começou sua
 		# fase de leitura
 		return Tj.timestamp_commit < Ti.timestamp_leitura
 

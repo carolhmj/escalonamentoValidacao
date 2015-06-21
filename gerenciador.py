@@ -3,6 +3,7 @@ from transação import Operação
 import re
 from collections import namedtuple
 import os
+import sys
 
 class Gerenciador(object):
 
@@ -13,6 +14,7 @@ class Gerenciador(object):
 	def ler_história():
 		história = input()
 		história = re.findall("(\S+?)(\d+)\((\S+?)\)",hist)
+		história = map(lambda p: (p[0],int(p[1]),p[2]), sequence)
 		história = list(map(OperaçãoGerenciador._make,história))
 		return história
 
@@ -21,13 +23,13 @@ class Gerenciador(object):
 			arquivo.write(operação.op + operação.transação + "(" + operação.objeto + ")")
 
 
-	def executar(self, arquivo_história, arquivo_saida):
-		história_inicial = Gerenciador.ler_história(arquivo_história)
+	def executar(self, arquivo_saida):
+		história_inicial = Gerenciador.ler_história()
 		#Inicialmente a história de saída é igual a história inicial, isso pode mudar quando retirarmos transações dela
 		história_saída = história_inicial
 
-		os.remove(arquivo_saida)
-		arquivo = open(arquivo_saida,'a+')
+		#arquivo = open(arquivo_saida,'w')
+		arquivo = sys.stdout;
 		arquivo.write("Schedule de Entrada: ")
 		Gerenciador.escrever_historia(história_inicial, arquivo)
 
@@ -35,17 +37,17 @@ class Gerenciador(object):
 		lista_commited = []
 		lista_cancelada = []
 		for operação in história_inicial:
+			transação = self.lista_transacoes[operação.transação-1]
 
-			transação = self.lista_transacoes[int(operação.transação)-1]
 			if (transação.estado == Transação.INICIADA):
 				transação.iniciar_leitura(timestamp)
-			if (transação.inserir_operação(Operação(operação.op, operação.objeto))):
 
+			if (transação.inserir_operação(Operação(operação.op, operação.objeto))):
 				if (transação.validar(timestamp,lista_commited)):
 					lista_commited.append(transação)
 				else:
 					transação.reiniciar_transação()
-					história_saída = filter(lambda x: x.transação != str(transação.identificador), história_saída)
+					história_saída = filter(lambda x: x.transação != transação.identificador, história_saída)
 					lista_cancelada.append(transação)
 
 			timestamp = timestamp + 1
