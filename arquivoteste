@@ -1,3 +1,2 @@
-T1:r(x)w(x)
-T2:r(y)w(y)
-T3:r(z)w(z)
+T1:r(x)w(y)w(x)
+T2:w(x)r(y)r(x)

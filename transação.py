@@ -27,6 +27,11 @@ class Transação(object):
 			out+=op.op+"("+op.objeto+")"
 		out += "\"])"
 		return out
+	def __str__(self):
+		out = "T"+str(self.identificador)+":"
+		for op in self.operações:
+			out+=op.op+"("+op.objeto+")"
+		return out
 
 	def primeiro_teste(Ti,Tj):
 		# Transação Tj completa sua fase de escrita antes que Ti começou sua
