@@ -13,13 +13,13 @@ class Gerenciador(object):
 
 	def ler_história(arquivo_entrada):
 		if arquivo_entrada == "stdin":
-			história = input()
+			história = input("Insira a história de entrada: ")
 		else:
 			arquivo  = open(arquivo_entrada,'r')
 			história = arquivo.readline()
 			arquivo.close()
 
-		história = re.findall("(\S+?)(\d+)\((\S+?)\)",história)
+		história = re.findall("(\S+?)(\d+)\((\S*?)\)",história)
 		história = map(lambda p: (p[0],int(p[1]),p[2]), história)
 		história = list(map(OperaçãoGerenciador._make,história))
 		return história
@@ -59,10 +59,14 @@ class Gerenciador(object):
 				else:
 					print("Abortado")
 					transação.reiniciar_transação()
-					história_saída = filter(lambda x: x.transação != transação.identificador, história_saída)
+					história_saída = list(filter(lambda x: x.transação != transação.identificador, história_saída))
 					lista_cancelada.append(transação)
 
 			timestamp = timestamp + 1
+
+		for transação in lista_cancelada:
+			for operação in transação.operações:
+				história_saída.append(OperaçãoGerenciador(operação.op, transação.identificador, operação.objeto))
 
 		arquivo.write("\nSchedule de Saída: ")
 		Gerenciador.escrever_historia(história_saída, arquivo)

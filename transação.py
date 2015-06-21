@@ -81,6 +81,7 @@ class Transação(object):
 		"""Leva a transação par a próxima operação.
 		Retorna True se todas as operações daquela transação forem realizadas,
 		assinalando a hora de dar commit"""
+
 		self.numero_operações = self.numero_operações + 1
 		return self.numero_operações == len(self.operações)
 
