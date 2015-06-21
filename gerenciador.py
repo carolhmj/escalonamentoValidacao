@@ -1,8 +1,7 @@
 from transação import Transação
 from transação import Operação
-import re
 from collections import namedtuple
-import os
+import re
 
 class Gerenciador(object):
 
@@ -12,22 +11,21 @@ class Gerenciador(object):
 
 	def ler_história():
 		história = input()
-		história = re.findall("(\S+?)(\d+)\((\S+?)\)",hist)
-		história = list(map(OperaçãoGerenciador._make,história))
+		história = re.findall("(\S+?)(\d+)\((\S*?)\)", história)
+		história = list(map(OperaçãoGerenciador._make, história))
 		return história
 
 	def escrever_historia(história, arquivo):
 		for operação in história:
 			arquivo.write(operação.op + operação.transação + "(" + operação.objeto + ")")
+	
 
-
-	def executar(self, arquivo_história, arquivo_saida):
-		história_inicial = Gerenciador.ler_história(arquivo_história)
+	def executar(self, arquivo_saida):
+		história_inicial = Gerenciador.ler_história()
 		#Inicialmente a história de saída é igual a história inicial, isso pode mudar quando retirarmos transações dela
 		história_saída = história_inicial
 
-		os.remove(arquivo_saida)
-		arquivo = open(arquivo_saida,'a+')
+		arquivo = open(arquivo_saida,'w')
 		arquivo.write("Schedule de Entrada: ")
 		Gerenciador.escrever_historia(história_inicial, arquivo)
 
