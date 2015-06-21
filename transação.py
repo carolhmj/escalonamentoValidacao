@@ -44,6 +44,7 @@ class Transação(object):
 		# com o conjunto de escrita de Tj e Tj completa sua fase de leitura antes de Ti.
 		x = Ti.conjunto_leitura.isdisjoint(Tj.conjunto_escrita) and \
 		    Ti.conjunto_escrita.isdisjoint(Tj.conjunto_escrita)
+		return x
 
 	def validar(Ti,timestamp,comitadas):
 		teste = lambda Tj: Ti.primeiro_teste(Tj) or \

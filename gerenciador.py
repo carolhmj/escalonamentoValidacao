@@ -1,9 +1,9 @@
 from transação import Transação
 from transação import Operação
-import re
 from collections import namedtuple
 import os
 import sys
+import re
 
 class Gerenciador(object):
 
@@ -21,7 +21,6 @@ class Gerenciador(object):
 	def escrever_historia(história, arquivo):
 		for operação in história:
 			arquivo.write(operação.op + operação.transação + "(" + operação.objeto + ")")
-
 
 	def executar(self, arquivo_saida):
 		história_inicial = Gerenciador.ler_história()
