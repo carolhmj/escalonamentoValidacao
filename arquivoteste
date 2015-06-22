@@ -1,2 +1,2 @@
-T1:r(x)w(y)w(x)
-T2:w(x)r(y)r(x)
+T1:r(a)w(a)r(b)w(b)
+T2:r(a)r(c)w(c)

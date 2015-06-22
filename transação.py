@@ -15,6 +15,9 @@ class Transação(object):
 		self.conjunto_leitura = set()
 		self.conjunto_escrita = set()
 
+		self.timestamp_commit = None
+		self.timestamp_leitura = None
+
 		for op in operações:
 			if   op.op == "w":
 				self.conjunto_escrita.add(op.objeto)
@@ -27,28 +30,47 @@ class Transação(object):
 			out+=op.op+"("+op.objeto+")"
 		out += "\"])"
 		return out
+
 	def __str__(self):
 		out = "T"+str(self.identificador)+":"
 		for op in self.operações:
 			out+=op.op+"("+op.objeto+")"
 		return out
 
+	def nome(self):
+		return "T"+str(self.identificador)
+
 	def primeiro_teste(Ti,Tj):
-		# Transação Tj completa sua fase de escrita antes que Ti começou sua
-		# fase de leitura
+		"""Transação Tj completa sua fase de escrita antes que Ti começou sua
+		fase de leitura """
+		#print ("Primeiro Teste")
+		#print (Tj.nome()+".timestamp_commit < "+Ti.nome()+".timestamp_leitura")
+		#print (str(Tj.timestamp_commit)+"<"+str(Ti.timestamp_leitura))
+		#print ((Tj.timestamp_commit)<(Ti.timestamp_leitura))
 		return Tj.timestamp_commit < Ti.timestamp_leitura
 
 	def segundo_teste(Ti, Tj):
-		# Ti começa a sua fase de escrita depois que Tj completa sua fase de
-		# escrita e o conjunto de leitura de Ti não tem intersecção com o
-		# conjunto de escrita de Tj
-		return Ti.conjunto_leitura.isdisjoint(Tj.conjunto_leitura)
+		"""Ti começa a sua fase de escrita depois que Tj completa sua fase de
+		escrita e o conjunto de leitura de Ti não tem intersecção com o
+		conjunto de escrita de Tj"""
+		#print ("\nSegundo Teste")
+		#print (Ti.nome()+".conjunto_leitura.isdisjoint("+Tj.nome()+".conjunto_escrita)")
+		#print (str(Ti.conjunto_leitura)+".isdisjoint("+str(Tj.conjunto_escrita)+")")
+		#print (Ti.conjunto_leitura.isdisjoint(Tj.conjunto_escrita))
+		return Ti.conjunto_leitura.isdisjoint(Tj.conjunto_escrita)
 
 	def terceiro_teste(Ti, Tj):
-		# A união do conjunto de leitura e escrita de Ti não tem intersecção
-		# com o conjunto de escrita de Tj e Tj completa sua fase de leitura antes de Ti.
+		"""A união do conjunto de leitura e escrita de Ti não tem intersecção
+		com o conjunto de escrita de Tj e Tj completa sua fase de leitura antes
+		de Ti."""
 		x = Ti.conjunto_leitura.isdisjoint(Tj.conjunto_escrita) and \
 		    Ti.conjunto_escrita.isdisjoint(Tj.conjunto_escrita)
+		#print("\nTerceiro Teste")
+		#print(Ti.nome()+".conjunto_leitura.isdisjoint("+Tj.nome()+".conjunto_escrita) and \n"+
+		#      Ti.nome()+".conjunto_escrita.isdisjoint("+Tj.nome()+".conjunto_escrita)")
+		#print(str(Ti.conjunto_leitura)+".isdisjoint("+str(Tj.conjunto_escrita)+") and \n"+
+		#      str(Ti.conjunto_escrita)+".isdisjoint("+str(Tj.conjunto_escrita)+")")
+		#print(x)
 		return x
 
 	def validar(Ti,timestamp,comitadas):

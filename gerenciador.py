@@ -52,12 +52,12 @@ class Gerenciador(object):
 				transação.iniciar_leitura(timestamp)
 
 			if (transação.próxima_operação()):
-				print("\nValidando: " + str(transação) + ": ",end="")
+				#print("\nValidando: " + str(transação) + ": ",end="\n")
 				if (transação.validar(timestamp,lista_commited)):
-					print("Validado")
+					#print("Validado")
 					lista_commited.append(transação)
 				else:
-					print("Abortado")
+					#print("Abortado")
 					transação.reiniciar_transação()
 					história_saída = list(filter(lambda x: x.transação != transação.identificador, história_saída))
 					lista_cancelada.append(transação)
